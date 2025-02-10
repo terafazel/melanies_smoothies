@@ -21,7 +21,6 @@ st.write("The name on your smoothie will be : ", name_on_order)
 
 
 # Get the current credentials
-session = get_active_session()
 my_dataframe = session.table("smoothies.public.FRUIT_OPTIONS").select(col('FRUIT_NAME'))
 #st.dataframe(data=my_dataframe, use_container_width=True)
 
