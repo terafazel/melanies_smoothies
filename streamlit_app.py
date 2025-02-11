@@ -30,15 +30,16 @@ st.stop()
 #Convert the snowpark dataframe to a pandas dataframe so we can use a LOC function 
 pd_df=my_dataframe.to_pandas()
 st.dataframe(pd_df)
-st.stop()
 
+fruit_list = pd_df['FRUIT_NAME'].tolist()
 
-
-
+# Use this list in multiselect
 ingredients_list = st.multiselect(
-    "Choose upto 5 ingredients",
-    my_dataframe,
+    "Choose up to 5 ingredients",
+    fruit_list,  # ✅ Now passing a proper list
 )
+
+
 if ingredients_list:
     
     
