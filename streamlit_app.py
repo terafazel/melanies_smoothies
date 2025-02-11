@@ -17,7 +17,7 @@ name_on_order = st.text_input("Name of the Smoothie")
 st.write("The name on your smoothie will be : ", name_on_order)
 
 # Fetch data from Snowflake
-my_dataframe = session.table("smoothies.public.FRUIT_OPTIONS").select(col('FRUIT_NAME'), col(''))
+my_dataframe = session.table("smoothies.public.FRUIT_OPTIONS").select(col('FRUIT_NAME'), col('SEARCH_ON'))
 st.dataframe(data=my_dataframe, use_container_width=True)
 
 # Convert Snowpark dataframe to Pandas dataframe
