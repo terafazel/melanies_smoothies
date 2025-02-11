@@ -31,12 +31,9 @@ st.stop()
 pd_df=my_dataframe.to_pandas()
 st.dataframe(pd_df)
 
-fruit_list = pd_df['FRUIT_NAME'].tolist()
-
-# Use this list in multiselect
 ingredients_list = st.multiselect(
-    "Choose up to 5 ingredients",
-    fruit_list,  # ✅ Now passing a proper list
+    "Choose upto 5 ingredients",
+    my_dataframe,
 )
 
 
