@@ -24,7 +24,7 @@ st.dataframe(data=my_dataframe, use_container_width=True)
 pd_df = my_dataframe.to_pandas()  # FIXED TYPO
 
 # Show converted dataframe for debugging
-st.dataframe(pd_df)
+#st.dataframe(pd_df)
 
 # Extract list of fruit names for selection
 fruit_list = pd_df['FRUIT_NAME'].tolist()  # FIXED MULTISELECT ISSUE
