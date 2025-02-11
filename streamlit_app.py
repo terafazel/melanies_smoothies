@@ -17,7 +17,7 @@ name_on_order = st.text_input("Name of the Smoothie")
 st.write("The name on your smoothie will be : ", name_on_order)
 
 # Fetch data from Snowflake
-my_dataframe = session.table("smoothies.public.FRUIT_OPTIONS").select(col('FRUIT_NAME'), col('SEARCH_ON'))
+my_dataframe = session.table("smoothies.public.FRUIT_OPTIONS").select(col('FRUIT_NAME'), col(''))
 st.dataframe(data=my_dataframe, use_container_width=True)
 
 # Convert Snowpark dataframe to Pandas dataframe
@@ -52,7 +52,7 @@ if ingredients_list:
         st.write(f"The search value for {fruit_chosen} is {search_on}")
 
         # Fetch nutrition info
-        smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{SEARCH_ON}")
+       smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + search_on)
         
         # Ensure API response is valid before displaying
         if smoothiefroot_response.status_code == 200:
