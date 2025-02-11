@@ -52,7 +52,7 @@ if ingredients_list:
         st.write(f"The search value for {fruit_chosen} is {search_on}")
 
         # Fetch nutrition info
-         smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + search_on)
+         smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + {search_on})
         
         # Ensure API response is valid before displaying
         if smoothiefroot_response.status_code == 200:
