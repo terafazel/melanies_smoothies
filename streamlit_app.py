@@ -29,7 +29,7 @@ st.dataframe(pd_df)
 # Extract list of fruit names for selection
 fruit_list = pd_df['FRUIT_NAME'].tolist()  # FIXED MULTISELECT ISSUE
 
-st.stop()  # Stops execution here for debugging (REMOVE after testing)
+
 
 # Multiselect for ingredients
 ingredients_list = st.multiselect(
