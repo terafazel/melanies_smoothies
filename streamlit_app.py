@@ -27,6 +27,12 @@ st.dataframe(data=my_dataframe, use_container_width=True)
 st.stop()
 
 
+#Convert the snowpark dataframe to a pandas dataframe so we can use a LOC function 
+pd_df=my_dataframe.to_panda()
+st.dataframe(pd_df)
+st.stop()
+
+
 
 
 ingredients_list = st.multiselect(
