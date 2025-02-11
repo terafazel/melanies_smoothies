@@ -28,7 +28,7 @@ st.stop()
 
 
 #Convert the snowpark dataframe to a pandas dataframe so we can use a LOC function 
-pd_df=my_dataframe.to_panda()
+pd_df=my_dataframe.to_pandas()
 st.dataframe(pd_df)
 st.stop()
 
