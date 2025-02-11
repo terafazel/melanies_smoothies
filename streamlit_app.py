@@ -27,45 +27,50 @@ st.dataframe(data=my_dataframe, use_container_width=True)
 st.stop()
 
 
-#Convert the snowpark dataframe to a pandas dataframe so we can use a LOC function 
-pd_df=my_dataframe.to_pandas()
-st.dataframe(pd_df)
+# Convert Snowpark dataframe to Pandas dataframe
+pd_df = my_dataframe.to_pandas()
 
+# Extract list of fruit names
+fruit_list = pd_df['FRUIT_NAME'].tolist()
+
+# Use this list in multiselect
 ingredients_list = st.multiselect(
-    "Choose upto 5 ingredients",
-    my_dataframe,
+    "Choose up to 5 ingredients",
+    fruit_list,  # ✅ Now passing a proper list
 )
 
-
 if ingredients_list:
+    ingredients_string = ''
     
-    
-    ingredients_string=''
     for fruit_chosen in ingredients_list:
-        ingredients_string+=fruit_chosen + ''
-        
-        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
-       #st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
+        ingredients_string += fruit_chosen + ', '  # Formatting properly
 
-        st.subheader(fruit_chosen + 'Nutrition Information')
-        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + search_on)
-        sf_df =st.dataframe(data=smoothiefroot_response.json(),use_container_width=True)
+        # Get the corresponding 'SEARCH_ON' value for the chosen fruit
+        search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
 
-   #st.write( ingredients_string)
+        # Debugging output
+        st.write(f'The search value for {fruit_chosen} is {search_on}.')
+
+        # Fetch nutrition information
+        smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{search_on}")
+        sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+
+    st.write("Selected Ingredients: ", ingredients_string)
+
+    # Insert into database
+    my_insert_stmt = f"""
+        INSERT INTO smoothies.public.orders(ingredients, name_on_order)
+        VALUES ('{ingredients_string}', '{name_on_order}')
+    """
     
-
-    my_insert_stmt = """ insert into smoothies.public.orders(ingredients, name_on_order)
-              values ('"""  +  ingredients_string  +  """' , '"""  +  name_on_order  +  """')"""
-
     st.write(my_insert_stmt)
-    
     
     time_to_insert = st.button('Submit Order')
     
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
+        st.success(f'Your Smoothie is ordered! {name_on_order}', icon="✅")
 
-        st.success('Your Smoothie is ordered! ' + name_on_order, icon="✅")
 
 
 
