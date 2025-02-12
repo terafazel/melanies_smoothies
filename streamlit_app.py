@@ -32,22 +32,17 @@ ingredients_list = st.multiselect(
 )
 
 if ingredients_list:
-    # Force exact order for known users (to match hashing)
-    if name_on_order == "Kevin":
-        ordered_ingredients = "Apples, Lime, Ximenia"
-    elif name_on_order == "Divya":
-        ordered_ingredients = "Dragon Fruit, Guava, Figs, Jackfruit, Blueberries"
-    elif name_on_order == "Xi":
-        ordered_ingredients = "Vanilla Fruit, Nectarine"
-    else:
-        # Ensure proper formatting for other users
-        ordered_ingredients = ', '.join(ingredients_list).strip()
-
+    # ✅ Sort, lowercase, and format ingredients correctly for hashing
+    ordered_ingredients = ", ".join(sorted(ingredients_list)).strip().lower()
+    
     # Display selected ingredients
     st.write("Selected Ingredients:", ordered_ingredients)
 
-    # Compute hash for debugging
-    hash_value = hashlib.sha256(ordered_ingredients.encode()).hexdigest()
+    # ✅ Use SHA-256 for hashing (Snowflake-compatible)
+    def snowflake_compatible_hash(text):
+        return int(hashlib.sha256(text.encode('utf-8')).hexdigest(), 16) % (2**63)
+
+    hash_value = snowflake_compatible_hash(ordered_ingredients)
     st.write("Computed Hash:", hash_value)
 
     # Nutrition information
@@ -67,8 +62,8 @@ if ingredients_list:
 
     # Insert order into Snowflake
     my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders(ingredients,name_on_order)
-        VALUES ('{ordered_ingredients}','{name_on_order}')"""
+        INSERT INTO smoothies.public.orders(ingredients, name_on_order, hash_ing)
+        VALUES ('{ordered_ingredients}', '{name_on_order}', {hash_value})"""
     
     st.write("Generated SQL Query:", my_insert_stmt)
     
