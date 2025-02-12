@@ -60,14 +60,13 @@ if ingredients_list:
         else:
             st.error(f"Failed to fetch data for {fruit_chosen}")
 
-    # Insert order into Snowflake
-    my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders(ingredients, name_on_order, hash_ing)
-        VALUES ('{ordered_ingredients}', '{name_on_order}', {hash_value})"""
-    
-    st.write("Generated SQL Query:", my_insert_stmt)
-    
+    # ✅ Prevent SQL injection by using parameter binding
+    insert_query = """
+        INSERT INTO smoothies.public.orders (ingredients, name_on_order, hash_ing)
+        VALUES (?, ?, ?)
+    """
+
     # Submit order
     if st.button('Submit Order'):
-        session.sql(my_insert_stmt).collect()
+        session.sql(insert_query).bind((ordered_ingredients, name_on_order, hash_value)).collect()
         st.success(f'Your Smoothie is ordered! {name_on_order}', icon="✅")
