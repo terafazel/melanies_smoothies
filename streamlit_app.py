@@ -7,7 +7,7 @@ st.title(":cup_with_straw: Customize Your Smoothie :cup_with_straw:")
 
 # Snowflake Connection Parameters
 connection_params = {
-account ="QOMIVUF-VZB86613"
+account =QOMIVUF-VZB86613
 user = "SHAKIB"
 password = "Kshazam26@"
 role = "SYSADMIN"
