@@ -9,12 +9,12 @@ import hashlib
 st.title(":cup_with_straw: Customize Smoothie :cup_with_straw:")
 st.write("Choose the fruits you want in your custom Smoothie!")
 
-# ✅ Get a single Snowflake session (fixes multiple session error)
-@st.cache_resource
-def get_snowflake_session():
-    return get_active_session()
-
-session = get_snowflake_session()
+# ✅ Get Snowflake session safely
+try:
+    session = get_active_session()
+except:
+    st.error("❌ Could not establish a Snowflake session. Please check your connection.")
+    st.stop()
 
 # User input for smoothie name
 name_on_order = st.text_input("Name of the Smoothie")
