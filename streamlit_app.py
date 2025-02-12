@@ -67,9 +67,8 @@ if ingredients_list:
 
     # Insert order into Snowflake
     my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders(ingredients, name_on_order)
-        VALUES ('{ordered_ingredients}', '{name_on_order}')
-    """
+        INSERT INTO smoothies.public.orders(ingredients,name_on_order)
+        VALUES ('{ordered_ingredients}','{name_on_order}')"""
     
     st.write("Generated SQL Query:", my_insert_stmt)
     
