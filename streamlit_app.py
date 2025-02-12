@@ -2,7 +2,6 @@
 import streamlit as st
 from snowflake.snowpark.functions import col
 import requests
-import hashlib  # To manually compute hash for debugging
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Smoothie :cup_with_straw:")
@@ -38,12 +37,11 @@ if ingredients_list:
     # Display selected ingredients
     st.write("Selected Ingredients:", ordered_ingredients)
 
-    # ✅ Use SHA-256 for hashing (Snowflake-compatible)
-    def snowflake_compatible_hash(text):
-        return int(hashlib.sha256(text.encode('utf-8')).hexdigest(), 16) % (2**63)
+    # ✅ Compute HASH using Snowflake SQL for consistency
+    hash_query = session.sql(f"SELECT SHA2('{ordered_ingredients}', 256)").collect()
+    hash_value = hash_query[0][0] if hash_query else None
 
-    hash_value = snowflake_compatible_hash(ordered_ingredients)
-    st.write("Computed Hash:", hash_value)
+    st.write("Computed Hash (Snowflake-generated):", hash_value)
 
     # Nutrition information
     for fruit_chosen in ingredients_list:
@@ -60,13 +58,13 @@ if ingredients_list:
         else:
             st.error(f"Failed to fetch data for {fruit_chosen}")
 
-    # ✅ Prevent SQL injection by using parameter binding
-    insert_query = """
+    # Insert order into Snowflake
+    my_insert_stmt = """
         INSERT INTO smoothies.public.orders (ingredients, name_on_order, hash_ing)
         VALUES (?, ?, ?)
     """
-
-    # Submit order
-    if st.button('Submit Order'):
-        session.sql(insert_query).bind((ordered_ingredients, name_on_order, hash_value)).collect()
-        st.success(f'Your Smoothie is ordered! {name_on_order}', icon="✅")
+    
+    # ✅ Use parameterized query to prevent SQL injection
+    session.sql(my_insert_stmt, [ordered_ingredients, name_on_order.lower(), hash_value]).collect()
+    
+    st.success(f'Your Smoothie is ordered! {name_on_order}', icon="✅")
