@@ -5,17 +5,6 @@ from snowflake.snowpark.functions import col
 # Streamlit App Title
 st.title(":cup_with_straw: Customize Your Smoothie :cup_with_straw:")
 
-# Snowflake Connection Parameters
-connection_params = {
-"account" : "QOMIVUF-VZB86613",
-"user" : "SHAKIB",
-"Password" : "Kshazam26@",
-"Role" : "SYSADMIN",
-"warehouse" : "COMPUTE_WH",
-"Database" : "SMOOTHIES",
-"Schema" : "PUBLIC"
-}
-
 # Establishing Snowflake Session
 try:
     session = Session.builder.configs(connection_params).create()
