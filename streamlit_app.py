@@ -17,7 +17,7 @@ name_on_order = st.text_input("The Name on the Smoothie : ")
 st.write("Smoothie Name : ",name_on_order)
 
 
-#session = get_active_session()
+session = get_active_session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 #st.dataframe(data=my_dataframe, use_container_width=True) #st is used to dislay the said content 
 
