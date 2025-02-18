@@ -15,8 +15,13 @@ session = cnx.session()
 name_on_order = st.text_input("The Name on the Smoothie : ")
 st.write("Smoothie Name : ", name_on_order)
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
-st.dataframe(data=my_dataframe, use_container_width=True) # st is used to display the said content 
+my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
+#st.dataframe(data=my_dataframe, use_container_width=True) # st is used to display the said content 
+#st.stop()
+
+#Convert the snowpark 
+pd_df=data=my_dataframe.to pandas()
+st.dataframe(pd_df)
 st.stop()
 
 ingredients_list = st.multiselect(
